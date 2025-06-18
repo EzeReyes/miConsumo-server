@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
-dotenv.config({path: "config.env"});
+// dotenv.config({path: "config.env"});
+dotenv.config()
 
 // ESTA FUNCIÓN GENERA UN ID ÚNICO
 const generarTokenID = () => {Math.random().toString(32).substring(2) + Date.now().toString(32);}
