@@ -12,7 +12,7 @@ const app = express();
 
 // Configuración CORS para aceptar cookies desde frontend en http://localhost:3000
 app.use(cors({
-  origin: "http://localhost:5173",  // 'https://mi-consumo.vercel.app' Cambia esto al dominio de tu frontend
+  origin: 'https://mi-consumo.vercel.app',  // http://localhost:5173' Cambia esto al dominio de tu frontend
   credentials: true                 // Muy importante para enviar cookies
 }));
 
