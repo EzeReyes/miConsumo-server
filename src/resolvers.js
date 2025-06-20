@@ -41,7 +41,7 @@ const resolvers = {
             await res.cookie('_token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'None',
+            sameSite: "None", //'Lax',
               maxAge: 1000 * 60 * 60 * 24 * 7 // 7 días
             })
 
