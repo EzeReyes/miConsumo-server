@@ -38,10 +38,12 @@ const resolvers = {
 
             // Token
             const token = crearToken(user.id, user.name);
-            await res.cookie('_token', token)
-            // httpOnly: true,
-            // secure: process.env.NODE_ENV === 'production',
-            // sameSite: 'Lax'
+            await res.cookie('_token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'None',
+              maxAge: 1000 * 60 * 60 * 24 * 7 // 7 días
+            })
 
             return { success: true, message: 'Autenticado con éxito', user: user };
         } catch (error) {
