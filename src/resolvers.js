@@ -16,6 +16,9 @@ const resolvers = {
                 console.log(error);
             }
         },
+        getCategories: async () => {
+
+        },
         getExpensesByID: async (_, { id }) => {
             const expense = await Expense.findById(id);
             return expense;
