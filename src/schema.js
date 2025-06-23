@@ -13,6 +13,7 @@ type Query {
     confirmUser(token: String): User
 
     getTask(user: ID!): [Task]
+    getTaskByID(id:ID!): Expense
 
 }
 
@@ -29,6 +30,7 @@ type Mutation {
     newTask(input: InputTask): String
     deleteTask(id: ID): String
     actualizarEstado(id: ID, realizado: Boolean): Task
+    updatedTask(id: ID!, name: String): Task
 
 
 }

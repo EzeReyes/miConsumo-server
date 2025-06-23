@@ -42,7 +42,7 @@ const resolvers = {
             await res.cookie('_token', token, {
             httpOnly: true,
             // secure: process.env.NODE_ENV === 'production',
-            sameSite: "Lax", //'None',
+            sameSite:  'None', //"Lax",
               maxAge: 1000 * 60 * 60 * 24 * 7 // 7 días
             })
 
@@ -124,6 +124,10 @@ const resolvers = {
                 console.log(error);
             }
         },
+        getTaskByID: async (_, { id }) => {
+            const task = await Task.findById(id);
+            return task;
+        },
     }, 
     Mutation: {
         newExpense: async (_, {input})  => {
@@ -141,6 +145,7 @@ const resolvers = {
                 if (!expense) {
                 throw new Error('Consumo inexistente');
                 }
+                console.log(`Consumo modificado..... ${expense}`)
                 return expense;
             } catch (error) {
                 // Podés loguearlo o relanzarlo
@@ -281,7 +286,20 @@ const resolvers = {
             console.error(error);
             throw new Error("Error al actualizar el estado de la tarea");
         }
-        }
+        },
+        updatedTask: async (_, { id, name }) => {
+            try {
+                const task = await Task.findByIdAndUpdate(id, { name }, { new: true });
+                if (!task) {
+                throw new Error('Tarea inexistente');
+                }
+                console.log(`Editando tarea.... ${task}`)
+                return task;
+            } catch (error) {
+                // Podés loguearlo o relanzarlo
+                throw new Error(error.message = 'Error al actualizar la tarea');
+            }         
+        }, 
 }
 }
 
