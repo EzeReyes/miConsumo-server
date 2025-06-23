@@ -4,13 +4,16 @@ const typeDefs = gql `
 
 type Query {
     getExpensesByID(id:ID!): Expense
-    getExpenses: [Expense]
+    getExpenses(user: ID!): [Expense]
 
     getToken: GetTokenResponse
     getUser(email: String!, password: String!): AuthResponse
     getUserPass(email: String!): User
     getUsers: [User]
     confirmUser(token: String): User
+
+    getTask(user: ID!): [Task]
+
 }
 
 type Mutation {
@@ -22,6 +25,12 @@ type Mutation {
     deleteUser(id: ID): String
     updatedUser(id: ID!, input: InputUser): User
     newPass(email: String, password: String): String
+
+    newTask(input: InputTask): String
+    deleteTask(id: ID): String
+    actualizarEstado(id: ID, realizado: Boolean): Task
+
+
 }
 
 type Expense {
@@ -29,6 +38,14 @@ type Expense {
     name: String
     cost: Float
     category: Category
+    user: ID
+}
+
+type Task {
+    id: ID
+    name: String
+    realizado: Boolean
+    user: ID
 }
 
 enum Category {
@@ -57,6 +74,7 @@ type User {
     password: String
 }
 
+
 type AuthResponse {
     success: Boolean!
     message: String!
@@ -67,6 +85,7 @@ input InputExpense {
     name: String!
     cost: Float!
     category: Category!
+    user: ID!
 }
 
 input InputUser {
@@ -74,6 +93,11 @@ input InputUser {
     surname: String!
     email: String!
     password: String
+}
+
+input InputTask {
+    name: String
+    user: ID
 }
 
 `

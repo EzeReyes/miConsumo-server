@@ -1,6 +1,6 @@
-import { response } from 'express';
 import Expense from '../model/Expense.js'
 import User from '../model/User.js'
+import Task from '../model/Task.js';
 import  bcrypt  from 'bcrypt'; 
 const  saltRounds  =  10; 
 import { generarTokenID, descifrarToken, crearToken } from '../helpers/tokens.js'
@@ -8,10 +8,11 @@ import { emailRegistro, olvideMiPass } from '../helpers/emails.js';
 
 const resolvers = {
     Query: {
-        getExpenses: async () => {
-            const expenses = await Expense.find({});
+        getExpenses: async (_, {user}) => {
+            const expense = await Expense.find({ user });
+            console.log(expense)
             try {
-                return expenses;
+                return expense;
             } catch (error) {
                 console.log(error);
             }
@@ -40,8 +41,8 @@ const resolvers = {
             const token = crearToken(user.id, user.name);
             await res.cookie('_token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: "None", //'Lax',
+            // secure: process.env.NODE_ENV === 'production',
+            sameSite: "Lax", //'None',
               maxAge: 1000 * 60 * 60 * 24 * 7 // 7 días
             })
 
@@ -103,7 +104,7 @@ const resolvers = {
                 console.log(error)
             }
             },
-                confirmUser: async (_, {token}) => {
+        confirmUser: async (_, {token}) => {
                     const user = await User.findOne({token});
                     if(!user) {
                         return null
@@ -113,7 +114,16 @@ const resolvers = {
                         user.save()
                         return user
                     }
-    }
+        },
+        getTask: async (_, {user}) => {
+            const task = await Task.find({ user });
+            console.log(task)
+            try {
+                return task;
+            } catch (error) {
+                console.log(error);
+            }
+        },
     }, 
     Mutation: {
         newExpense: async (_, {input})  => {
@@ -168,6 +178,7 @@ const resolvers = {
 
                 // Autenticar usuario
                 user.token = generarTokenID();
+                console.log(user.token)
                 await user.save();
 
                 emailRegistro({
@@ -225,8 +236,53 @@ const resolvers = {
             } catch (error) {
                 console.log(error)
             }
+        },
+        newTask: async (_, {input})  => {
+        try {
+            const newTask = new Task(input);
+            newTask.save();
+            return "Tarea creada correctamente";
+        } catch (error) {
+            console.log(error);
         }
-    }
+        },
+        deleteTask: async (_, { id }) => {
+        try {
+            // Validar si el id es un ObjectId válido
+
+            const deleted = await Task.findByIdAndDelete(id);
+
+            if (!deleted) {
+            throw new Error('Tarea inexistente');
+            }
+
+            return 'Tarea eliminada correctamente';
+        } catch (error) {
+            // Captar mensaje de error y modificarlo
+            if(error.message === "ObjectId is not defined") {
+                throw new Error('ID inválido para Tarea');
+            }        
+        }
+        },
+        actualizarEstado: async (_, { id, realizado }) => {
+        try {
+            const tareaActualizada = await Task.findByIdAndUpdate(
+            id,
+            { realizado }, // ✅ Se pasa como objeto
+            { new: true }   // ✅ Devuelve la tarea actualizada
+            );
+
+            if (!tareaActualizada) {
+            throw new Error("Tarea no encontrada");
+            }
+
+            return tareaActualizada; // ✅ Devolvemos la tarea actualizada (no un string)
+        } catch (error) {
+            console.error(error);
+            throw new Error("Error al actualizar el estado de la tarea");
+        }
+        }
+}
 }
 
 export default resolvers;

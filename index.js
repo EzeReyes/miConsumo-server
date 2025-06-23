@@ -26,7 +26,7 @@ db();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  introspection: true,
+  // introspection: true,
 });
 
 async function startServer() {

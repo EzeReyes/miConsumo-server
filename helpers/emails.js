@@ -22,7 +22,7 @@ const emailRegistro = async (datos) => {
             <p>Hola comprueba tu cuenta en miConsumo.com.</p>
 
             <p>Tu cuenta ya está lista, solo debes confirmarla en el siguiente enlace:
-            <a href="${process.env.BACKEND_URL}:5173/confirmar/${token}" >Confirma tu cuenta</a>
+            <a href="http://localhost:5173/confirmar/${token}" >Confirma tu cuenta</a>
             <p>Si tu no creaste esta cuenta, puedes ignorar el mensaje</p>
         `
     })
@@ -51,7 +51,7 @@ const olvideMiPass = async (datos) => {
             <p>Hola ${nombre}, has solicitado reestablecer tu password en miConsumo.com</p>
 
             <p>Sigue el siguiente enlace para generar un password nuevo:
-            <a href="${process.env.BACKEND_URL}:5173/reset-password/${token}" >Reestablece tu password</a>
+            <a href="http://localhost:5173/reset-password/${token}" >Reestablece tu password</a>
             <p>Si tu no solicitaste el cambio de contraseña, puedes ignorar el mensaje</p>
         `
     })
