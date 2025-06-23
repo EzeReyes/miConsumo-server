@@ -41,7 +41,7 @@ const resolvers = {
             const token = crearToken(user.id, user.name);
             await res.cookie('_token', token, {
             httpOnly: true,
-            // secure: process.env.NODE_ENV === 'production',
+            secure: process.env.NODE_ENV === 'production',
             sameSite:  'None', //"Lax",
               maxAge: 1000 * 60 * 60 * 24 * 7 // 7 días
             })
